@@ -2,10 +2,13 @@ import threading
 
 import grpc
 
+import sys
+sys.path.append('../')
+
 import chat_pb2 as chat
 import chat_pb2_grpc as rpc
 
-address = 'localhost'
+address = 'server'
 port = 11912
 
 class Client:

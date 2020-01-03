@@ -5,6 +5,9 @@ import time
 
 from datetime import datetime
 
+import sys
+sys.path.append('../')
+
 import chat_pb2 as chat
 import chat_pb2_grpc as rpc
 
@@ -57,9 +60,9 @@ class ChatServer(rpc.ChatServerServicer):
     def ChatStream(self, request_iterator, context):
 
         lastindex = 0
-        # For every client a infinite loop starts (in gRPC's own managed thread)
+
         while True:
-            # Check if there are any new messages
+
             while len(self.chats) > lastindex:
                 n = self.chats[lastindex]
                 lastindex += 1
@@ -73,7 +76,7 @@ class ChatServer(rpc.ChatServerServicer):
         registro.timestamp = str(now)
         registro.log_ID = len(self.chats)
 
-        print("timestamp {} \t\t messaje_ID {} \t\t emisor_ID {} \t\t user_ID: {} \t\t mensaje: {}\n".format(registro.timestamp, registro.log_ID ,registro.emisor_ID, registro.ID, registro.mensaje))
+        #print("timestamp {} \t\t messaje_ID {} \t\t emisor_ID {} \t\t user_ID: {} \t\t mensaje: {}\n".format(registro.timestamp, registro.log_ID ,registro.emisor_ID, registro.ID, registro.mensaje))
         self.log.write("{} \t\t {} \t\t {} \t\t {} \t\t {}".format(registro.timestamp, registro.log_ID ,registro.emisor_ID, registro.ID, registro.mensaje))
 
         self.log.flush()
@@ -86,11 +89,26 @@ class ChatServer(rpc.ChatServerServicer):
 
         self._record_peer(context)
         print("Se esta registrando el cliente {}".format(context.peer()))
-        self.user.write(str(context.peer())+"\t\t"+str(context.peer().split(':')[4])+"\n")
+        str_IP = context.peer().split(':')
 
-        self.user.flush()
+        if (str(str_IP[0]) == 'ipv4'):
 
-        return chat.Nota(mensaje='Hola '+str(context.peer())+', tu ID sera: '+str(context.peer().split(':')[4]), ID = int(context.peer().split(':')[4]))  
+            self.user.write(str(context.peer())+"\t\t"+str(str_IP[2])+"\n")
+
+            self.user.flush()
+
+            return chat.Nota(mensaje='Hola '+str(context.peer())+', tu ID sera: '+str(str_IP[2]), ID = int(str_IP[2]))  
+
+        elif (str(str_IP[0]) == 'ipv6'):
+
+            self.user.write(str(context.peer())+"\t\t"+str(str_IP[5])+"\n")
+
+            self.user.flush()
+
+            return chat.Nota(mensaje='Hola '+str(context.peer())+', tu ID sera: '+str(str_IP[5]), ID = int(str_IP[5]))  
+
+        else:
+            print("No se reconoce la IP")
 
 
     def EnviarListaMensajes(self, request: chat.Nota, context):
