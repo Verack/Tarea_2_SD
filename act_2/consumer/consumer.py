@@ -4,8 +4,7 @@ import pika, os, time,threading,uuid
 def callback(ch, method, props, body):
     if(body ==""):
         return
-    print("processing")
-    print(" [x] Received " + str(body))
+    print(" Recibido paquete: " + str(body))
     msg_id = str(uuid.uuid4())
     print (msg_id)
     f= open("log.txt","a")
@@ -26,23 +25,25 @@ def callback(ch, method, props, body):
     f.close()
 
 
-    print(lis)
     channel.queue_declare(queue=lis[1])
     ch.basic_publish(exchange='', routing_key=lis[1], body=lis[2])
-    print(" processing finished");
+    print("Mensaje enviado");
     return;
 
 
 def consola():
     while(True):
         print("Elija una opcion:")
-        print("1) Ver mensajes")
+        print("1) Ver mensajes de usuario: ")
         print("2) Ver usuarios")
-        opc=input("")
+        opc=raw_input("")
         if opc =="1":
+            print("Escriba la id del usuario: ")
+            idu=raw_input("")
             f= open("log.txt","r")
             for i in f:
-                print(i)
+                if i.split(";")[0] == idu:
+                    print("Mensaje: "+i.split(";")[2]+" al destinatario: "+i.split(";")[1])
             f.close()
         if opc =="2":
             f= open("usuarios.txt","r")
@@ -54,13 +55,13 @@ t1 = threading.Thread(target=consola, args=())
 t1.start()
 
 f= open("log.txt","w")
+f.write("ID_Remitente;ID_Destinatario;Mensaje;TimeStamp;ID_Mensaje"+"\n")
 g= open("usuarios.txt","w")
 f.close()
 g.close()
 
 
 
-# Access the CLODUAMQP_URL environment variable and parse it (fallback to localhost)
 url = os.environ['AMQP_URL']
 params = pika.URLParameters(url)
 connection = pika.BlockingConnection(params)

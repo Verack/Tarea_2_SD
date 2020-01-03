@@ -50,7 +50,17 @@ services:
     networks:
       - network
 
-  publisher:
+  publisher0:
+    # Identical to the consumer.
+    build: publisher
+    stdin_open: true
+    tty: true
+    environment:
+      AMQP_URL: 'amqp://rabbitmq?connection_attempts=5&retry_delay=5'
+    networks:
+      - network
+
+  publisher1:
     # Identical to the consumer.
     build: publisher
     stdin_open: true

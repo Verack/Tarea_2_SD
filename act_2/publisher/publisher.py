@@ -2,15 +2,13 @@ import pika, os, logging,threading,uuid
 from datetime import datetime
 logging.basicConfig()
 
-def pdf_process_function(msg):
-  print("processing")
-  print(" [x] Received " + str(msg))
-  print(" processing finished");
-  return;
+def process_function(msg):
+    print("Recibido el mensaje: " + msg+" ")
+    return;
 
 
 def callback(ch, method, properties, body):
-  pdf_process_function(body)
+    process_function(body)
 
 def enviar(idr):
     url = os.environ['AMQP_URL']
@@ -21,15 +19,17 @@ def enviar(idr):
     channel = connection.channel() # start a channel
     channel.queue_declare(queue='e') # Declare a queue
     while (True):
-        id=input("Escriba la id: ")
-        msg=input("Escriba su mensaje: ")
+        print("Escriba la id del destinatario: ")
+        id=raw_input("")
+        print("Escriba su mensaje: ")
+        msg=raw_input("")
         now=str(datetime.now())
-        msg=idr+";"+id+";"+msg+";"+now
+        msgf=idr+";"+id+";"+msg+";"+now
         channel = connection.channel() # start a channel
         channel.queue_declare(queue='e') # Declare a queue
         channel.basic_publish(exchange='', routing_key='e', body="")
-        channel.basic_publish(exchange='', routing_key='e', body=msg)
-        print ("[x] "+msg+" enviado")
+        channel.basic_publish(exchange='', routing_key='e', body=msgf)
+        print ("El mensaje "+msg+" ha sido enviado a "+id+" en "+now)
 
 
 
@@ -47,7 +47,7 @@ def recibir(id):
 
 
 corr_id = str(uuid.uuid4())
-print (corr_id)
+print ("ID del usuario: "+corr_id)
 
 
 t1 = threading.Thread(target=enviar, args=(corr_id,))
