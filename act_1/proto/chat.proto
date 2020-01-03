@@ -10,12 +10,20 @@ package chat;
 message Vacio {}
 
 message NotaInicial {
-	string nombre = 1 
+	string nombre = 1; 
 }
 
 message Nota {
-    string ID = 1;
+    int32 ID = 1;
+    int32 log_ID = 4;
+    int32 emisor_ID = 5;
     string mensaje = 2;
+    string timestamp = 3;
+
+}
+
+message ListaNota{
+	repeated Nota lista = 1;
 }
 
 service ChatServer {
@@ -24,4 +32,8 @@ service ChatServer {
     rpc ChatStream (Vacio) returns (stream Nota);
     //servicio que permite enviar mensajes al servidor que procesara luego
     rpc EnviarNota (Nota) returns (Vacio);
+    //servicio que permite enviar el primer mensaje, para registrar al cliente nuevo en el servidor
+    rpc EnviarNotaInicial (NotaInicial) returns (Nota);
+
+    rpc EnviarListaMensajes (Nota) returns (ListaNota);
 }
