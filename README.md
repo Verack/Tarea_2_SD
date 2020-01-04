@@ -11,7 +11,7 @@ General:
   - Dentro de esa carpetas se encuentra el archivo docker-compose.yml
   - En cada carpeta se tiene que ejecutar el comando "> docker-compose build" y "> docker-compose up"
   - Una vez que se haya ejecutado el comando "docker-compose up", para interactuar con el chat, se debe primero, utilizar el comando "> sudo docker ps -a"
-  - Luego de hacer esto, para tomar control de un cliente en el terminal (que no sea el mismo que cuando se ejecuto "docker-compose up"), se debe poner el comando "sudo docker attach <ID container>"
+  - Luego de hacer esto, para tomar control de un cliente en el terminal (que no sea el mismo que cuando se ejecuto "docker-compose up"), se debe poner el comando "sudo docker attach [ID container]"
 
 Actividad 1:
 
