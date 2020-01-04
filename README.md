@@ -17,3 +17,11 @@ Actividad 1:
 
   - Los dos archivos (log.txt y user.txt) se generan en la misma ruta donde se ubica el docker-compose
   
+Actividad 2:
+  
+  - Los publisher corresponden a los clientes, mientras que el consumer cumple el rol de servidor
+  - Se recomienda ejecutar primero el servidor de rabbitmq para evitar errores de conexion esto utilizando el comando "docker-compose up -d rabbitmq"
+  - Al inicio de la ejecucion de los clientes aparecera su id correspondiente, para enviar un mensaje primero se debe colocar la id del remitente y luego el mensaje a enviar.
+  - En el servidor se podra seleccionar la opcion de ver los mensajes de un cliente, luego de seleccionarla se debera ingresar la id del cliente correspondiente para ver sus mensajes
+  - Para que un servidor sepa la existencia de un cliente, este debe haber mandado primero un mensaje. Esto es importante de considerar en la opcion de ver los clientes conectados al servidor.
+  
