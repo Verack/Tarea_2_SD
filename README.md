@@ -16,6 +16,9 @@ General:
 Actividad 1:
 
   - Los dos archivos (log.txt y user.txt) se generan en la misma ruta donde se ubica el docker-compose
+  - Al inicio de la ejecucion de los clientes aparecera su id correspondiente, junto a las opciones disponibles
+  - Para enviar un mensaje, se debe seleccionar [1] en las opciones, luego se le va a pedir el mensaje y luego el ID del receptor del mensaje
+  - Para ver la lista de mensajes enviados se debe seleccionar [2] en las opciones
   
 Actividad 2:
   
